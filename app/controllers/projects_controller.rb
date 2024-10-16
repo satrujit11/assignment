@@ -8,11 +8,12 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new
+    @project = current_user.projects.new
   end
 
   def create
-    @project = Project.new(project_params)  # Create a new project without user scope
+    @project = current_user.projects.new(project_params)  # Create a new project without user scope
+    Rails.logger.debug(@project)
     if @project.save
       redirect_to projects_path, notice: "Project created successfully"
     else
