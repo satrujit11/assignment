@@ -1,0 +1,21 @@
+<h1 class="text-4xl font-bold mb-6 text-gray-800">Search Results</h1>
+
+<% if @tasks.any? %>
+  <div class="bg-white rounded-lg p-6 mb-4">
+    <ul class="">
+      <% @tasks.each do |task| %>
+        <li class="mb-4">
+          <div class="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-blue-600 transition-shadow duration-300 ease-in-out">
+            <div class="flex-1">
+              <%= link_to task.name, project_path(task.project, anchor: "task-#{task.id}"), class: 'text-blue-600 font-semibold text-lg hover:underline' %>
+              <p class="text-gray-600">Project: <%= task.project.name %> </p><p class="text-gray-600">Assigned to: <%= task.assigned_user.email %></p>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <p class="text-gray-600">No tasks found matching your criteria.</p>
+<% end %>
+

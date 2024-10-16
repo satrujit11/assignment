@@ -1,0 +1,56 @@
+<h1 class="text-3xl font-bold mb-6">Edit Task: <%= @task.name %></h1>
+
+<%= form_with(model: [@project, @task], local: true) do |form| %>
+  <% if @task.errors.any? %>
+    <div
+      id="error_explanation"
+      class="bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-4"
+    >
+      <h2 class="font-semibold">
+        <%= pluralize(@task.errors.count, 'error') %> prohibited this task from
+        being saved:
+      </h2>
+      <ul class="list-disc list-inside">
+        <% @task.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <%= form.label :name, class: 'block text-lg font-semibold mb-1' %>
+    <%= form.text_field :name, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :description, class: 'block text-lg font-semibold mb-1' %>
+    <%= form.text_area :description, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :status, class: 'block text-lg font-semibold mb-1' %>
+    <%= form.select :status, ['Not Started', 'In Progress', 'Completed'], { prompt: 'Select Status' }, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :tags, 'Select Existing Tags', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.collection_select :tag_list, ActsAsTaggableOn::Tag.all, :name, :name, { prompt: 'Select existing tags' }, class: 'border border-gray-300 rounded w-full p-2' %>
+    <small class="text-gray-500">Add new tags separated by commas.</small>
+    <%= form.text_field :tag_list, value: @task.tag_list.join(", "), class: 'border border-gray-300 rounded w-full p-2 mt-2', placeholder: 'Enter new tags separated by commas' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :assigned_user_id, 'Assign to User', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.collection_select :assigned_user_id, User.all, :id, :email, { include_blank: true }, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div>
+    <%= form.submit 'Update Task', class: 'bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700' %>
+  </div>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to 'Cancel', project_path(@project), class: 'text-blue-600 hover:underline' %>
+</div>
+

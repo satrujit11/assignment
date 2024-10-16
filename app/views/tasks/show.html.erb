@@ -1,0 +1,39 @@
+<%=
+  link_to '← Back to Project',
+          project_path(@project),
+          class: 'mb-4 inline-block text-blue-600 hover:underline'
+%>
+
+<h1 class="text-4xl font-bold mb-4"><%= @task.name %></h1>
+<p class="text-gray-600 mb-2"><%= @task.description %></p>
+<p class="text-gray-500"><strong>Status:</strong> <%= @task.status %></p>
+
+<% if @task.assigned_user %>
+  <p class="text-gray-500"><strong>Assigned to:</strong> <%= @task.assigned_user.email %></p>
+<% else %>
+  <p class="text-gray-500"><strong>Assigned to:</strong> <em>Not Assigned</em></p>
+<% end %>
+
+<h4 class="text-lg font-semibold mt-4">Comments</h4>
+<ul class="mt-2 space-y-2">
+  <% @comments.each do |comment| %>
+    <li class="flex items-start">
+      <strong class="mr-2"><%= comment.user.email %>:</strong>
+      <span><%= comment.content %></span>
+      <em class="text-gray-400 ml-2 text-sm">( <%= comment.created_at.strftime('%Y-%m-%d %H:%M:%S') %> )</em>
+      <% if comment.user == current_user %>
+        <%= button_to 'Delete', project_task_comment_path(@project, @task, comment), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'ml-4 text-red-500 hover:underline' %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+
+<%= form_with(model: [@project, @task, Comment.new], local: true) do |form| %>
+  <div class="mt-2">
+    <%= form.label :content, 'Add a comment:', class: 'block mb-1' %>
+    <%= form.text_area :content, rows: 3, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+  <%= form.submit 'Comment', class: 'mt-2 bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700' %>
+<% end %>
+

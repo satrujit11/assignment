@@ -1,0 +1,74 @@
+<%=
+  link_to '← Back to Projects',
+          projects_path,
+          class: 'mb-4 inline-block text-blue-600 hover:underline'
+%>
+<h1 class="text-3xl font-bold mb-6">Edit Project</h1>
+
+<%= form_with(model: @project, local: true) do |form| %>
+  <% if @project.errors.any? %>
+    <div
+      id="error_explanation"
+      class="bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-4"
+    >
+      <h2 class="font-semibold">
+        <%= pluralize(@project.errors.count, 'error') %> prohibited this project
+        from being saved:
+      </h2>
+      <ul class="list-disc list-inside">
+        <% @project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <%= form.label :name, class: 'block text-lg font-semibold mb-1' %>
+    <%=
+      form.text_field :name, class: 'border border-gray-300 rounded w-full p-2'
+    %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :description, class: 'block text-lg font-semibold mb-1' %>
+    <%=
+      form.text_area :description,
+                     class: 'border border-gray-300 rounded w-full p-2'
+    %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :start_date, class: 'block text-lg font-semibold mb-1' %>
+    <%=
+      form.date_field :start_date,
+                      class: 'border border-gray-300 rounded w-full p-2'
+    %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :end_date, class: 'block text-lg font-semibold mb-1' %>
+    <%=
+      form.date_field :end_date,
+                      class: 'border border-gray-300 rounded w-full p-2'
+    %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :status, class: 'block text-lg font-semibold mb-1' %>
+    <%=
+      form.select :status,
+                  ['Not Started', 'In Progress', 'Completed'],
+                  { prompt: 'Select Status' },
+                  class: 'border border-gray-300 rounded w-full p-2'
+    %>
+  </div>
+
+  <div>
+    <%=
+      form.submit 'Update Project',
+                  class:
+                    'bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700'
+    %>
+  </div>
+<% end %>

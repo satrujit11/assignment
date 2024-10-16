@@ -1,0 +1,42 @@
+<h1 class="text-3xl font-bold mb-6">
+  Create a New Task for <%= @project.name %>
+</h1>
+
+<%= form_with(model: [@project, @task], local: true) do |form| %>
+  <div class="mb-4">
+    <%= form.label :name, 'Task Name', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.text_field :name, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :description, 'Description', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.text_area :description, rows: 3, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :status, class: 'block text-lg font-semibold mb-1' %>
+    <%= form.select :status, ['Not Started', 'In Progress', 'Completed'], { prompt: 'Select Status' }, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :tags, 'Select Existing Tags', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.collection_select :tag_list, ActsAsTaggableOn::Tag.all, :name, :name, { prompt: 'Select existing tags' }, class: 'border border-gray-300 rounded w-full p-2' %>
+    <small class="text-gray-500">Add new tags separated by commas.</small>
+    <%= form.text_field :tag_list, value: @task.tag_list.join(", "), class: 'border border-gray-300 rounded w-full p-2 mt-2', placeholder: 'Enter new tags separated by commas' %>
+  </div>
+
+
+  <div class="mb-4">
+    <%= form.label :assigned_user_id, 'Assign to user:', class: 'block text-lg font-semibold mb-1' %>
+    <%= form.collection_select :assigned_user_id, User.all, :id, :email, { prompt: 'Select a user' }, class: 'border border-gray-300 rounded w-full p-2' %>
+  </div>
+
+  <div>
+    <%= form.submit 'Create Task', class: 'bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700' %>
+  </div>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to 'Back to Project', project_path(@project), class: 'text-blue-600 hover:underline' %>
+</div>
+

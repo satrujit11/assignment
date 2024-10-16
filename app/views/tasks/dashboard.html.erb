@@ -1,0 +1,45 @@
+<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+
+<h2 class="text-xl font-semibold mb-4">Important Links</h2>
+<%= link_to 'Projects', projects_path, class: 'mb-4 inline-block text-blue-600 hover:underline text-lg' %>
+
+<h2 class="text-xl font-semibold mb-4">Recent Search Queries</h2>
+<ul class="space-y-2">
+  <% @recent_search_queries.each do |search_query| %>
+    <li>
+      <%= link_to search_query.query, search_tasks_path(query: search_query.query), class: 'text-blue-600 hover:underline' %>
+      <span class="text-gray-500">(<%= search_query.created_at.strftime('%Y-%m-%d %H:%M:%S') %>)</span>
+    </li>
+  <% end %>
+</ul>
+
+<h2 class="text-xl font-semibold mt-6 mb-4">Assigned Tasks</h2>
+<table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="py-2 px-4 text-left text-gray-600">Task Name</th>
+      <th class="py-2 px-4 text-left text-gray-600">Project</th>
+      <th class="py-2 px-4 text-left text-gray-600">Created At</th>
+      <th class="py-2 px-4 text-left text-gray-600">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Task.where(assigned_user: current_user).each do |task| %> <!-- Fetch only tasks assigned to the current user -->
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2">
+          <%= link_to task.name, project_task_path(task.project, task), class: 'text-blue-600 hover:underline' %>
+        </td>
+        <td class="px-4 py-2">
+          <%= task.project.name if task.project %>
+        </td>
+        <td class="px-4 py-2">
+          <%= task.created_at.strftime('%Y-%m-%d %H:%M:%S') %> <!-- Format the created_at timestamp -->
+        </td>
+        <td class="px-4 py-2">
+          <%= task.status %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
